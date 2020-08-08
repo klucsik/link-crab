@@ -7,8 +7,9 @@ def exercise_url(session, url):
         print(f"invalid link: {url}")
         return False
     resp = session.get(url)
-    print(f"[*] link: {url} - {resp.status_code} - {resp.elapsed.total_seconds()} s")
-    outcome=[url,resp.status_code, resp.elapsed.total_seconds()]
+    accessible = resp.ok and resp.url == url
+    print(f"[*] link: {url} - {resp.status_code} - {resp.elapsed.total_seconds()/1000} ms - accessible: {accessible}")
+    outcome=[url,resp.status_code, resp.elapsed.total_seconds()/1000, accessible]
     return outcome
 
 

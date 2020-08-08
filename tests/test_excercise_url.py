@@ -13,7 +13,16 @@ def test_session():
     session = make_session()
     return session
 
-
+# These tests are highly dependent on the testapp.py
 def test_url_validations(test_session):
     assert exercise_url(test_session,'Á://127.0.0.1:5000') == False
     assert exercise_url(test_session,'http://127.0.0.1:5000') != False
+
+def test_url_status_codes(test_session):
+    assert exercise_url(test_session,'http://127.0.0.1:5000')[1] == 200
+    assert exercise_url(test_session,'http://127.0.0.1:5000/missing')[1] == 404
+
+def test_accessibility(test_session):
+    assert exercise_url(test_session,'http://127.0.0.1:5000/')[3] == True
+    assert exercise_url(test_session,'http://127.0.0.1:5000/missing')[3] == False # Inaccessible because of status code is not ok
+    assert exercise_url(test_session,'http://127.0.0.1:5000/member')[3] == False # Inaccessible because of permission
