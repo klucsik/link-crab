@@ -129,6 +129,7 @@ def create_app():
                     <p><a href={{ url_for('member_page') }}>{%trans%}Member Page{%endtrans%}</a> (login_required: member@example.com / Password1)</p>
                     <p><a href={{ url_for('admin_page') }}>{%trans%}Admin Page{%endtrans%}</a> (role_required: admin@example.com / Password1')</p>
                     <p><a href={{ url_for('user.logout') }}>{%trans%}Sign out{%endtrans%}</a></p>
+                    <p><a href=missing>{%trans%}missing{%endtrans%}</a></p>
                 {% endblock %}
                 """)
 
@@ -182,7 +183,7 @@ def flaskThread():
 
 def generate_mock_app():
     """
-    THis should be only used for quickly wind up a test app for development
+    Quickly wind up a test app for development
     """
     thread = threading.Thread(target=flaskThread)
     thread.daemon = True
