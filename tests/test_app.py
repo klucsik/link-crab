@@ -130,6 +130,7 @@ def create_app():
                     <p><a href={{ url_for('admin_page') }}>{%trans%}Admin Page{%endtrans%}</a> (role_required: admin@example.com / Password1')</p>
                     <p><a href={{ url_for('user.logout') }}>{%trans%}Sign out{%endtrans%}</a></p>
                     <p><a href=missing>{%trans%}missing{%endtrans%}</a></p>
+                    Put here some cool malformed hrefs, and make good validations
                 {% endblock %}
                 """)
 
@@ -174,7 +175,7 @@ app = create_app()
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=False)
+    app.run(host='127.0.0.1', port=5000, debug=True)
 
 
 
