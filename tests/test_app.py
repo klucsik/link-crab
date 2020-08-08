@@ -148,6 +148,7 @@ def create_app():
                     <p><a href={{ url_for('member_page') }}>{%trans%}Member Page{%endtrans%}</a> (login_required: member@example.com / Password1)</p>
                     <p><a href={{ url_for('admin_page') }}>{%trans%}Admin Page{%endtrans%}</a> (role_required: admin@example.com / Password1')</p>
                     <p><a href={{ url_for('user.logout') }}>{%trans%}Sign out{%endtrans%}</a></p>
+                    <p><a href=missing_member_only>{%trans%}Member only test{%endtrans%}</a></p>
                 {% endblock %}
                 """)
 

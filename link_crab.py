@@ -20,8 +20,8 @@ generate_mock_app()
 # setup:
 print('----------------setup---------------------')
 
-session = make_session()
-starting_url = 'http://127.0.0.1:5000'
+session = make_session('member')
+starting_url = 'http://127.0.0.1:5000/'
 total_urls_visited = 0
 checked_domain = urlparse(starting_url).netloc
 links = set()
@@ -59,7 +59,7 @@ crawl(starting_url)
 
 # excresizing:
 print('----------------Excercise links---------------------')
-
+session = make_session('member') #remake the session, because crawling through the log-out link logs us out :D
 for link in links:
     link_db.append(exercise_url(session, link)) #TODO: error handling
 
@@ -68,7 +68,7 @@ for link in links:
 print('----------------Report---------------------')
 
 for link in link_db:
-    print(f"[*] {link[0]} - {GREEN if link[1]==200 else RED} {link[1]} {RESET}- {link[2]} s")
+    print(f"[*] {link[0]} - {GREEN if link[1]==200 else RED} {link[1]} {RESET}- {link[2]} ms - {link[3]}")
 
 save_linkdb_to_csv(link_db)
 

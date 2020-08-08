@@ -8,8 +8,10 @@ def exercise_url(session, url):
         return False
     resp = session.get(url)
     accessible = resp.ok and resp.url == url
-    print(f"[*] link: {url} - {resp.status_code} - {resp.elapsed.total_seconds()/1000} ms - accessible: {accessible}")
-    outcome=[url,resp.status_code, resp.elapsed.total_seconds()/1000, accessible]
+    if not accessible:
+        print(f"    not accessible: statuscode: {resp.status_code}, url: {resp.url}")
+    print(f"[*] link: {url} - {resp.status_code} - {resp.elapsed.total_seconds()*1000} ms - accessible: {accessible}")
+    outcome=[url,resp.status_code, int(resp.elapsed.total_seconds()*1000), accessible]
     return outcome
 
 
