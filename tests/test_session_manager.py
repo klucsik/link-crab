@@ -10,7 +10,12 @@ from tests.test_app import mock_app
 
 @pytest.fixture(scope='session')
 def test_session():
-    session = make_session('member')
+    member_mockuser = {
+        'login_url': 'http://127.0.0.1:5000/user/sign-in',
+        'email': 'member@example.com',
+        'password': 'Password1'
+    }
+    session = make_session(member_mockuser)
     return session
 
 # These tests are highly dependent on the testapp.py

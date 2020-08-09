@@ -1,0 +1,5 @@
+starting_url: http://127.0.0.1:5000/
+user:
+    email: member@example.com
+    login_url: http://127.0.0.1:5000/user/sign-in
+    password: Password1

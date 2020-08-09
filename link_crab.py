@@ -3,6 +3,9 @@ from url_gatherer import get_all_website_links
 from exercise_url import exercise_url
 from reporting import save_linkdb_to_csv
 from urllib.request import urlparse
+
+import yaml
+
 import colorama
 
 # Colorama init https://pypi.org/project/colorama/
@@ -19,9 +22,13 @@ generate_mock_app()
 
 # setup:
 print('----------------setup---------------------')
+config={}
+with open('config.yaml') as f:
+    config = yaml.load(f, Loader=yaml.FullLoader)
+user=config['user']
 
-session = make_session('member')
-starting_url = 'http://127.0.0.1:5000/'
+session = make_session(user)
+starting_url = config['starting_url']
 total_urls_visited = 0
 checked_domain = urlparse(starting_url).netloc
 links = set()
@@ -59,7 +66,7 @@ crawl(starting_url)
 
 # excresizing:
 print('----------------Excercise links---------------------')
-session = make_session('member') #remake the session, because crawling through the log-out link logs us out :D
+session = make_session(user) #remake the session, because crawling through the log-out link logs us out :D
 for link in links:
     link_db.append(exercise_url(session, link)) #TODO: error handling
 
