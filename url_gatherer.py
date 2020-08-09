@@ -13,23 +13,26 @@ def get_all_website_links(session, url, links):
 
     # domain name of the URL without the protocol
     domain_name = urlparse(url).netloc
-    soup = BeautifulSoup(session.get(url).content, "html.parser")
 
-    for a_tag in soup.findAll():
-        href = a_tag.attrs.get("href")
-        if href == "" or href is None:
-            continue
+    try:
+        soup = BeautifulSoup(session.get(url).content, "html.parser")
 
-        href = urljoin(url, href)
-        parsed_href = urlparse(href)
+        for a_tag in soup.findAll():
+            href = a_tag.attrs.get("href")
+            if href == "" or href is None:
+                continue
 
-        # remove URL GET parameters, URL fragments, etc.
-        href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
+            href = urljoin(url, href)
+            parsed_href = urlparse(href)
+
+            # remove URL GET parameters, URL fragments, etc.
+            href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
         
-        if href in links:
-            print(f"[ ] link already gathered: {href}")
-        else:
-            links.add(href)
-            print(f"[+] link found: {href}")
-
+            if href in links:
+                print(f"[ ] link already gathered: {href}")
+            else:
+                links.add(href)
+                print(f"[+] link found: {href}")
+    except:
+        print("An exception occurred")
     return links
