@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from session_manager import make_session
-from url_gatherer import get_all_website_links
+from gather_links import get_all_website_links
 from test_app import app
 import pytest
 from tests.test_excercise_url import test_session

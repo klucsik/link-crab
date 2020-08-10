@@ -1,11 +1,11 @@
-from session_manager import make_session
-from url_gatherer import get_all_website_links
-from exercise_url import exercise_url
-from reporting import save_linkdb_to_csv
+import session_manager
+import reporting
+import exercise_url
+import gather_links
+
 from urllib.request import urlparse
-
 import yaml
-
+from datetime import datetime
 import colorama
 
 # Colorama init https://pypi.org/project/colorama/
@@ -17,58 +17,40 @@ RESET = colorama.Fore.RESET
 
 
 #for development tests
+import time
 from tests.test_app import generate_mock_app
 generate_mock_app()
 
 # setup:
 print('----------------setup---------------------')
+starting_time = datetime.now()
 config={}
 with open('config.yaml') as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
-user=config['user']
+user = None
+try:
+    user=config['user']
+except:
+    pass    
+session = session_manager.make_session(user)
 
-session = make_session(user)
 starting_url = config['starting_url']
-total_urls_visited = 0
-checked_domain = urlparse(starting_url).netloc
+
 links = set()
-crawled_links= set()
 link_db = []
+links.add(starting_url)
 
 # gathering:
 print('----------------gather links---------------------')
-
-def crawl(url):
-    print (f'currently checked page: {url}')
-    global crawled_links
-    global links
-    global total_urls_visited
-
-    parsed = urlparse(url)
-    if not (parsed.netloc == checked_domain):
-        print(f'    skip: out of domain: {parsed.netloc}')
-        return
-        
-    if  url in crawled_links :
-        print(f'    skip: already visited: {url}')
-        return
-    
-    total_urls_visited += 1
-    links = get_all_website_links(session, url, links)
-    crawled_links.add(url)
-    links_to_crawl= links-crawled_links
-    links_to_crawl.discard(url) #FIXME: There is a lot of duplicants in links_to_crawl
-    for link in links_to_crawl:
-        crawl(link)
-
-crawl(starting_url)
-
+checked_domain = urlparse(starting_url).netloc
+links.add(starting_url)
+links = gather_links.gather_links(session, links,checked_domain)
 
 # excresizing:
 print('----------------Excercise links---------------------')
-session = make_session(user) #remake the session, because crawling through the log-out link logs us out :D
+session = session_manager.make_session(user) #remake the session, because crawling through the log-out link logs us out :D
 for link in links:
-    link_db.append(exercise_url(session, link)) #TODO: error handling
+    link_db.append(exercise_url.exercise_url(session, link)) #TODO: error handling
 
 
 # reporting:
@@ -77,6 +59,6 @@ print('----------------Report---------------------')
 for link in link_db:
     print(f"[*] {link[0]} - {GREEN if link[1]==200 else RED} {link[1]} {RESET}- {link[2]} ms - {link[3]}")
 
-save_linkdb_to_csv(link_db)
+reporting.save_linkdb_to_csv(link_db,checked_domain)
 
 
