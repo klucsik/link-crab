@@ -36,9 +36,11 @@ def get_cookies_with_selenium(user):
     submit_button = driver.find_element_by_xpath('//input[@type="submit"]')
 
     submit_button.click()
-    # time.sleep(1) 
-    print(f"got cookie with selenium: {driver.get_cookies()}")
-    return driver.get_cookies()
+    # time.sleep(1)
+    cookies = driver.get_cookies()
+    print(f"got cookie with selenium: {cookies}")
+    driver.close()
+    return cookies
 
 
     

@@ -13,7 +13,9 @@ def test_session():
     member_mockuser = {
         'login_url': 'http://127.0.0.1:5000/user/sign-in',
         'email': 'member@example.com',
-        'password': 'Password1'
+        'password': 'Password1',
+        'password_locator_id': 'password',
+        'email_locator_id': 'email'
     }
     session = make_session(member_mockuser)
     return session
