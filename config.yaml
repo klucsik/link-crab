@@ -1,7 +1,7 @@
 starting_url: http://127.0.0.1:5000/
 user:
     email: member@example.com
-    email_locator_id: user_email
+    email_locator_id: email
     login_url: http://127.0.0.1:5000/user/sign-in
     password: Password1
-    password_locator_id: user_password
+    password_locator_id: password
