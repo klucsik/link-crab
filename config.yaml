@@ -5,3 +5,4 @@ user:
     login_url: http://127.0.0.1:5000/user/sign-in
     password: Password1
     password_locator_id: password
+path_to_link_perms: testapp_member_access.csv

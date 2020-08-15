@@ -1,0 +1,14 @@
+link,should-access
+http://127.0.0.1:5000/,TRUE
+http://127.0.0.1:5000/user/register,TRUE
+http://127.0.0.1:5000/members,TRUE
+http://127.0.0.1:5000/user/forgot-password,TRUE
+http://127.0.0.1:5000/user/edit_user_profile,TRUE
+http://127.0.0.1:5000/admin,FALSE
+http://127.0.0.1:5000/user/missing,
+http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css,
+http://127.0.0.1:5000/missing,
+http://127.0.0.1:5000/missing_member_only,
+http://127.0.0.1:5000/user/sign-in,TRUE
+http://127.0.0.1:5000/user/sign-out,TRUE
+http://127.0.0.1:5000/user/change-password,TRUE
