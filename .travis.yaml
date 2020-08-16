@@ -7,3 +7,7 @@ install:
 
 script:
 - python link_crab.py config_perm_checking.yaml -t
+- pytest --cov=myapp tests/
+
+after_success:
+- coveralls

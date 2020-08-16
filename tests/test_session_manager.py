@@ -2,9 +2,9 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from session_manager import make_session
-from exercise_url import exercise_url
-from test_app import app
+from link_crab.session_manager import make_session
+from link_crab.exercise_url import exercise_url
+from tests.test_app import app
 import pytest
 from tests.test_app import mock_app
 

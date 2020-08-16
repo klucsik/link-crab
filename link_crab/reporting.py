@@ -2,7 +2,7 @@ from datetime import datetime
 
 import os
 delimiter=','
-
+#TODO: some test-reports folder would be nice tbh, The -t argument should be used
 def save_linkdb_to_csv(link_db, domain_name):
     if not os.path.exists(f'reports/{domain_name}'):
         os.makedirs(f'reports/{domain_name}')

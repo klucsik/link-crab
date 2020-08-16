@@ -1,3 +1,6 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from tests.test_app import generate_mock_app
 import time
 import session_manager

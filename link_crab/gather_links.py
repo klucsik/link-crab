@@ -1,4 +1,11 @@
-import reporting
+try:
+    import reporting as reporting
+except:
+    pass
+try:
+    import link_crab.reporting as reporting
+except:
+    pass
 
 import requests
 from bs4 import BeautifulSoup
