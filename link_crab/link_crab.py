@@ -21,6 +21,7 @@ GREEN = colorama.Fore.GREEN
 RED = colorama.Fore.RED
 YELLOW = colorama.Fore.YELLOW
 GRAY = colorama.Fore.LIGHTBLACK_EX
+CYAN = colorama.Fore.CYAN
 RESET = colorama.Fore.RESET
 
 exit_value = 0
@@ -30,8 +31,34 @@ exit_value = 0
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(
-        description="Link-Crab: A link crawler and permission testing tool, written in Python")
-    parser.add_argument("config_yaml_path", metavar='path', type=str,
+        description="Link-Crab: A link crawler and permission testing tool, written in Python",
+        usage=f"""
+        Provide a path for your config yaml file. 
+        Usable config keys:
+            {CYAN}starting_url: http://127.0.0.1:5000{RESET}
+                Gather the reachable links in the starting_url's page and all of its subpages.
+                After collecting all the links, the link exerciser load every in-domain url with a GET request, and measures 
+                status code, response time, response url after all redirects, and accessibility based on status code and response url
+            
+            {CYAN}path_to_link_perms: testapp_member_access.csv{RESET}
+                Test accessibility of provided links. The csv should have a link and a should-access column. 
+                asserts the link accessibility equals to provided should-access.
+                A link is accessible if the response status code<400, and after redirets the respone url equals the starting url
+                (some framework give a 404 for unaccessible pages or redriects to sign_in page)
+
+            {CYAN}user:
+                email: member@example.com
+                email_locator_id: email
+                login_url: http://127.0.0.1:5000/user/sign-in
+                password: Password1
+                password_locator_id: password{RESET}
+                =>  Login with the help of selenium webdriver (chromedriver). You need to provide the url of the login form, 
+                    and the id's of the email (or username) and password fields.
+
+
+        """
+        )
+    parser.add_argument("config_yaml_path", metavar='config_yaml_path', type=str,
                         help="Path to the config yaml file.")
     parser.add_argument("-t" ,"--test", action='store_true', help="wind up the default test application for testing")
 
