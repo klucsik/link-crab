@@ -54,8 +54,6 @@ if __name__ == "__main__":
                 password_locator_id: password{RESET}
                 =>  Login with the help of selenium webdriver (chromedriver). You need to provide the url of the login form, 
                     and the id's of the email (or username) and password fields.
-
-
         """
         )
     parser.add_argument("config_yaml_path", metavar='config_yaml_path', type=str,
