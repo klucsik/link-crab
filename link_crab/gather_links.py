@@ -16,7 +16,7 @@ links_to_crawl = set()
 total_urls_visited = 0
 
 
-
+# FIXME: hangs if he first link is "out of domain" or unreachable?
 def gather_links(session, links, checked_domain):
     for link in links:
         links_to_crawl.add(link)

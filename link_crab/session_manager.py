@@ -2,9 +2,10 @@ import requests
 from selenium import webdriver
 import time
 
+#FIXME: handle exception when webdriver is not present
+
 def make_session(user=None):
     session = requests.session()
-    #do the cookie thingies here
     if user:
         cookies = get_cookies_with_selenium(user)
         for cookie in cookies:
