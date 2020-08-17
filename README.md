@@ -1,7 +1,8 @@
 # The Link Crab
 
 [![PyPI version](https://badge.fury.io/py/link-crab.svg)](https://badge.fury.io/py/link-crab)
-
+![Run Pytest](https://github.com/klucsik/link-crab/workflows/Run%20Pytest/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/klucsik/link-crab/badge.svg?branch=master)](https://coveralls.io/github/klucsik/link-crab?branch=master)
 A simple CLI tool which can crawl through your website and catch broken links, and can check user permissions to specific pages on your website.
 
 ## Workmode: Link gathering:

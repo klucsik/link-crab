@@ -1,6 +1,7 @@
 import requests
 from selenium import webdriver
 import time
+from selenium.webdriver.chrome.options import Options 
 
 #FIXME: handle exception when webdriver is not present
 
@@ -21,7 +22,12 @@ def get_cookies_with_selenium(user):
     password= user['password']
     password_locator_id = user['password_locator_id']
 
-    driver = webdriver.Chrome()
+ 
+
+    chrome_options = Options()  
+    chrome_options.add_argument("--headless")   
+
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get(login_url)
     
     
