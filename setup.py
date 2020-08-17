@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="link-crab-TEST_KLUCSIK", # Replace with your own username
-    version="0.2.2",
+    name="link-crab",
+    version="0.1.0",
     author="Krisztián Pál Klucsik",
     author_email="klucsik.krisztian@gmail.com",
     description="A link crawler and permission testing tool for websites",

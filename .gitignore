@@ -6,3 +6,6 @@ reports
 geckodriver.log
 .coverage
 *.sqlite
+build/
+dist/
+*.egg-info
