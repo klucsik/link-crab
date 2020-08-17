@@ -3,6 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/link-crab.svg)](https://badge.fury.io/py/link-crab)
 ![Run Pytest](https://github.com/klucsik/link-crab/workflows/Run%20Pytest/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/klucsik/link-crab/badge.svg?branch=master)](https://coveralls.io/github/klucsik/link-crab?branch=master)
+
 A simple CLI tool which can crawl through your website and catch broken links, and can check user permissions to specific pages on your website.
 
 ## Workmode: Link gathering:
@@ -23,11 +24,15 @@ The configuration is done through a yaml config files.
 
 ## Installation
 
-*soon...*
+Install with `pip install link-crab`
+
+Dependencies: [chromedriver](https://chromedriver.chromium.org/downloads) for logging in to the tested site.
 
 ## Usage:
-Simply use the command `link-crab/link-crab.py path/to/your/config.yaml` in the Link Crabs directory. All the configuration is done in the config files, which is expanded bellow.
+Simply use the command `python -m link_crab path/to/your/config.yaml` in the PYthon envrionment which has the link-crab installed. All the configuration is done in the config file, which is expanded bellow.
 If you want to use the sample flask mock app for testing, provide the `-t` flag.
+
+For additional help run:  `python -m link-crab -h`
 
 
 ### Usable config keys:
@@ -47,6 +52,16 @@ Test accessibility of provided links. The csv should have a link and a should-ac
 asserts the link accessibility equals to provided should-access.
 A link is accessible if the response status code<400, and after redirets the respone url equals the starting url
 (some framework give a 404 for unaccessible pages or redriects to sign_in page)
+
+ Sample link_perms csv:
+
+| link                                         | should-access |
+|----------------------------------------------|---------------|
+| http://127.0.0.1:5000/                       | TRUE          |
+| http://127.0.0.1:5000/user/register          | TRUE          |
+| http://127.0.0.1:5000/members                | TRUE          |
+| http://127.0.0.1:5000/admin                  | FALSE         |
+
 
 **User**
 
