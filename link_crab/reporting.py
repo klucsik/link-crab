@@ -11,10 +11,10 @@ def save_linkdb_to_csv(link_db, domain_name):
         for link in link_db:
             print(f"{link[0]}{delimiter}{link[1]}{delimiter}{link[4]}{delimiter}{link[2]}{delimiter}{link[3]}", file=f)
 
-def save_permdb_to_csv(perm_db, domain_name):
+def save_permdb_to_csv(perm_db, domain_name, user_email):
     if not os.path.exists(f'reports/{domain_name}'):
         os.makedirs(f'reports/{domain_name}')
-    with open(f"reports/{domain_name}/{domain_name}_{datetime.now()}_permission_check_result.csv", "w") as f:
+    with open(f"reports/{domain_name}/{domain_name}_{datetime.now()}_{user_email}_permission_check_result.csv", "w") as f:
         print(f"url{delimiter}status_code{delimiter}response_time(ms){delimiter}accessible?{delimiter}should_be_accessible?{delimiter}assert_accessibility", file=f)
         for link in perm_db:
             print(f"{link[0]}{delimiter}{link[1]}{delimiter}{link[4]}{delimiter}{link[2]}{delimiter}{link[3]}{delimiter}{link[5]}{delimiter}{link[6]}", file=f)

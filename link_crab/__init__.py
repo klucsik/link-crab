@@ -141,7 +141,7 @@ def main():
             outcome = outcome + [link_perm[1]] + [assertion_outcome]
             link_perm_db.append(outcome)
 
-        reporting.save_permdb_to_csv(link_perm_db, checked_domain)
+        reporting.save_permdb_to_csv(link_perm_db, checked_domain, user['email'])
 
         print('----------------REPORT: Checked permissions---------------------')
         for link in link_perm_db:
