@@ -6,20 +6,84 @@
 
 A simple CLI tool which can crawl through your website and catch broken links, and can check user permissions to specific pages on your website.
 
-## Workmode: Link gathering:
+## Workmode - Link gathering:
 In this mode, you provide a starting url, and the Link Crab will crawl through the starting page, and all the page which is accessible thorugh links from that page and is in the same domain as the starting apge.
 The program export the gathered links in a txt file, then exercise them, gathering response time and status code, and exporting these in a csv file.
 
-## Workmode: Link access permission checking:
+ ## Workmode - Link access permission checking:
 In this mode you provide a csv file with links to check, and wether those links should be accessible. The Link Crab will check every link in the list, determines if its accessible or not, and then assert the expected accessibilty to the actual accessibility. 
 A link is considered accessible if the http response for a get request on the link has a status code under 400, and after all redirects, the url is equals of the starting url. 
 (Most of the websites either give you a 404 or redirect to the sign-in page.)
 *Maybe following the redirects is unnecessary, but I considered it safer*
 
 ## Session management:
-In both workmode, you can provide login informations. The Link Crab opens up a Chrome browser with Selenium webdriver, and 
+In both workmode, you can provide login informations. The Link Crab opens up a Chrome browser with Selenium webdriver, and goes to the provided login page. On the login page, it will find the email and password fields, based on the html ids you provided, and fills it with your credentials. Then it will click on the submit button, thus logs in to the page. Then the Link Crab aquires the cookies, and closes the browser. It will use this auth cookies through the testing.
 
-All reports are saved in the reports folder under a filder named by the domain name.
+If you are in Permission checking mode, and want to check the logout page, be sure you will not need the session in the next checked pages after the logout.
+
+## Generated reports:
+
+The Link Crab will make the following reports:
+
+**[domain_name]_links.txt:**
+This report is generated in the link gathering mode, through the gathering phase. It will be updated as the gatherer crawls through the pages.
+
+Example from the mock app:
+
+    http://127.0.0.1:5000/user/sign-in
+    http://127.0.0.1:5000/user/forgot-password
+    http://127.0.0.1:5000/members
+    http://127.0.0.1:5000/user/edit_user_profile
+    http://127.0.0.1:5000/missing
+    http://127.0.0.1:5000/user/change-password
+    http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css
+    http://127.0.0.1:5000/user/missing
+    http://127.0.0.1:5000/user/register
+    http://127.0.0.1:5000/user/sign-out
+    http://127.0.0.1:5000/
+    http://127.0.0.1:5000/missing_member_only
+    http://127.0.0.1:5000/admin
+
+**[domain_name]_[datetime]_exercised_links.csv:**
+This report is generated at the end of the exercising phase in the link gathering mode.
+
+Example from the mock app:
+| url                                                                  | status_code | resp_url(after_redirects)                                            | response_time(ms) | accessible? |
+|----------------------------------------------------------------------|-------------|----------------------------------------------------------------------|-------------------|-------------|
+| http://127.0.0.1:5000/user/sign-in                                   | 200         | http://127.0.0.1:5000/                                               | 10                | False       |
+| http://127.0.0.1:5000/user/forgot-password                           | 200         | http://127.0.0.1:5000/user/forgot-password                           | 6                 | True        |
+| http://127.0.0.1:5000/members                                        | 200         | http://127.0.0.1:5000/members                                        | 10                | True        |
+| http://127.0.0.1:5000/user/edit_user_profile                         | 200         | http://127.0.0.1:5000/user/edit_user_profile                         | 6                 | True        |
+| http://127.0.0.1:5000/missing                                        | 404         | http://127.0.0.1:5000/missing                                        | 3                 | False       |
+| http://127.0.0.1:5000/user/change-password                           | 200         | http://127.0.0.1:5000/user/change-password                           | 13                | True        |
+| http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css | 200         | http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css | 94                | True        |
+| http://127.0.0.1:5000/user/missing                                   | 404         | http://127.0.0.1:5000/user/missing                                   | 2                 | False       |
+| http://127.0.0.1:5000/user/register                                  | 200         | http://127.0.0.1:5000/user/register                                  | 7                 | True        |
+| http://127.0.0.1:5000/user/sign-out                                  | 200         | http://127.0.0.1:5000/                                               | 8                 | False       |
+| http://127.0.0.1:5000/                                               | 200         | http://127.0.0.1:5000/                                               | 8                 | True        |
+| http://127.0.0.1:5000/missing_member_only                            | 404         | http://127.0.0.1:5000/missing_member_only                            | 3                 | False       |
+| http://127.0.0.1:5000/admin                                          | 200         | http://127.0.0.1:5000/user/sign-in?next=/admin                       | 9                 | False       |
+
+**[domain_name]_[datetime]_[user_email]_permission_check_result.csv:**
+This report is generated at the end of the permission checking mode.
+
+Example from the mock app:
+
+| url                                          | status_code | resp_url(after_redirects)                                     | accessible? | should_be_accessible? | assert_accessibility |
+|----------------------------------------------|-------------|---------------------------------------------------------------|-------------|-----------------------|----------------------|
+| http://127.0.0.1:5000/                       | 200         | http://127.0.0.1:5000/                                        | True        | True                  | PASSED               |
+| http://127.0.0.1:5000/user/register          | 200         | http://127.0.0.1:5000/user/register                           | True        | True                  | PASSED               |
+| http://127.0.0.1:5000/members                | 200         | http://127.0.0.1:5000/members                                 | True        | True                  | PASSED               |
+| http://127.0.0.1:5000/user/forgot-password   | 200         | http://127.0.0.1:5000/user/forgot-password                    | True        | True                  | PASSED               |
+| http://127.0.0.1:5000/user/edit_user_profile | 200         | http://127.0.0.1:5000/user/edit_user_profile                  | True        | True                  | PASSED               |
+| http://127.0.0.1:5000/admin                  | 200         | http://127.0.0.1:5000/                                        | False       | False                 | PASSED               |
+| http://127.0.0.1:5000/user/sign-in           | 200         | http://127.0.0.1:5000/                                        | False       | True                  | FAILED               |
+| http://127.0.0.1:5000/user/sign-out          | 200         | http://127.0.0.1:5000/                                        | False       | True                  | FAILED               |
+| http://127.0.0.1:5000/user/change-password   | 200         | http://127.0.0.1:5000/user/sign-in?next=/user/change-password | False       | True                  | FAILED               |
+
+
+All reports are saved in the reports folder under a folder named by the domain name. For example, when you test  `example.com`, the reports will be in `reports/example.com/` relative to where you called the command.
+
 The configuration is done through a yaml config files.
 
 ## Installation
@@ -34,8 +98,9 @@ If you want to use the sample flask mock app for testing, provide the `-t` flag.
 
 For additional help run:  `python -m link-crab -h`
 
+A good usage pattern would be to run the Link Crab first in link gathering mode, and from the generated links.txt select the links for the permission checking mode.
 
-### Usable config keys:
+### Configuration:
 **starting_url**
 
     starting_url: http://127.0.0.1:5000
