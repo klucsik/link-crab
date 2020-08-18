@@ -6,7 +6,7 @@ delimiter=','
 def save_linkdb_to_csv(link_db, domain_name):
     if not os.path.exists(f'reports/{domain_name}'):
         os.makedirs(f'reports/{domain_name}')
-    with open(f"reports/{domain_name}/{domain_name}_{datetime.now()}_exersized_links.csv", "w") as f:
+    with open(f"reports/{domain_name}/{domain_name}_{datetime.now()}_exercised_links.csv", "w") as f:
         print(f"url{delimiter}status_code{delimiter}resp_url(after_redirects){delimiter}response_time(ms){delimiter}accessible?", file=f)
         for link in link_db:
             print(f"{link[0]}{delimiter}{link[1]}{delimiter}{link[4]}{delimiter}{link[2]}{delimiter}{link[3]}", file=f)
