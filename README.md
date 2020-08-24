@@ -48,6 +48,7 @@ Example from the mock app:
 This report is generated at the end of the exercising phase in the link gathering mode.
 
 Example from the mock app:
+
 | url                                                                  | status_code | resp_url(after_redirects)                                            | response_time(ms) | accessible? |
 |----------------------------------------------------------------------|-------------|----------------------------------------------------------------------|-------------------|-------------|
 | http://127.0.0.1:5000/user/sign-in                                   | 200         | http://127.0.0.1:5000/                                               | 10                | False       |
