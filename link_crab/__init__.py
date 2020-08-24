@@ -98,6 +98,8 @@ def main():
 
     exit_value = 0
     exit_message =""
+    link_error_count = 0
+    perm_error_count = 0 
 
     # gathering:
     if starting_url:
@@ -117,6 +119,7 @@ def main():
             if exercise_outcome[1] > 400:
                 exit_value = 1
                 exit_message = exit_message + f"broken link found: {exercise_outcome[0]}\n"
+                link_error_count = link_error_count + 1
 
         reporting.save_linkdb_to_csv(link_db, checked_domain)
 
@@ -148,11 +151,16 @@ def main():
             if link[6] != 'PASSED':
                 exit_value = 1
                 exit_message = exit_message + f"Failed permission found: {link[0]}\n"
+                perm_error_count = perm_error_count + 1
             print(f"[*] {link[0]} - {GREEN if link[1]==200 else RED} {link[1]} {RESET} - {GREEN if link[0]==link[4] else YELLOW} {link[4]} {RESET} - {link[2]} ms - accessible: {GREEN if link[3]==True else YELLOW} {link[3]} {RESET} - should-be?: {link[5]} - assert:{GREEN if link[6]== 'PASSED' else RED} {link[6]} {RESET}")
 
     # Exit:
-    print(f"finished, exit:{exit_value}")
-    print(exit_message)
+    if starting_url:
+        print(f"Gathered {len(link_db)} links, {link_error_count} of them broken.")
+    if path_to_link_perms:
+        print(f"Checked {len(link_perm_db)} links for permission, {perm_error_count} of them is not met the expectations.")
+    print(f"exit value:{exit_value}")
+    print(f"messages: {exit_message}")
     sys.exit(exit_value)
 
 
