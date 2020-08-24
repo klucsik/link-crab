@@ -1,3 +1,5 @@
+ * DOCUMENTATION: Fixed table formatting in Generated Reports section
+
 # release v0.1.1
 
 * FEATURE: exercise report name now contains the username
