@@ -1,3 +1,4 @@
+ * FEATURE: Generate summary at the end of the reports
  * DOCUMENTATION: Fixed table formatting in Generated Reports section
 
 # release v0.1.1
