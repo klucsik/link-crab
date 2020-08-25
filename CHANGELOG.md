@@ -1,3 +1,4 @@
+ * FEATURE: Better logging
  * FEATURE: Generate summary at the end of the reports
  * DOCUMENTATION: Fixed table formatting in Generated Reports section
 

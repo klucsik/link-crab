@@ -2,6 +2,9 @@ import requests
 from selenium import webdriver
 import time
 from selenium.webdriver.chrome.options import Options 
+import logging
+
+module_logger = logging.getLogger(__name__)
 
 #FIXME: handle exception when webdriver is not present
 
@@ -12,7 +15,7 @@ def make_session(user=None):
         for cookie in cookies:
             cookie_obj = requests.cookies.create_cookie(domain=cookie['domain'],name=cookie['name'],value=cookie['value'])
             session.cookies.set_cookie(cookie_obj)
-        print(session.cookies)
+        module_logger.debug(session.cookies)
     return session
 
 def get_cookies_with_selenium(user):
@@ -45,7 +48,7 @@ def get_cookies_with_selenium(user):
     submit_button.click()
     # time.sleep(1)
     cookies = driver.get_cookies()
-    print(f"got cookie with selenium: {cookies}")
+    module_logger.debug(f"got cookie with selenium: {cookies}")
     driver.close()
     return cookies
 

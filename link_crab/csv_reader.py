@@ -1,4 +1,7 @@
 import csv
+import logging
+
+module_logger = logging.getLogger(__name__)
 
 def read_link_perms(path_to_csv):
     with open(path_to_csv, 'r') as file:
@@ -14,5 +17,5 @@ def read_link_perms(path_to_csv):
                 else:
                     raise 'invalid should-access value in perm-set! use true/false'
                 link_perms.append([row['link'],should_access])
-    print(link_perms)
+    module_logger.debug(link_perms)
     return link_perms

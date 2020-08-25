@@ -10,18 +10,20 @@ except:
 import requests
 from bs4 import BeautifulSoup
 from urllib.request import urljoin, urlparse
+import logging
 
 crawled_links = set()
 links_to_crawl = set()
 total_urls_visited = 0
 
+module_logger = logging.getLogger(__name__)
 
 # FIXME: hangs if he first link is "out of domain" or unreachable?
 def gather_links(session, links, checked_domain):
     for link in links:
         links_to_crawl.add(link)
     while len(links_to_crawl) > 0:
-        print(f"PROGRESS: {len(links)} links found, {len(crawled_links)} already crawled, {len(links_to_crawl)} left to crawl.")
+        module_logger.info(f"PROGRESS: {len(links)} links found, {len(crawled_links)} already crawled, {len(links_to_crawl)} left to crawl.")
         for link in links_to_crawl:
             crawl(session, link, links, checked_domain)
         reporting.save_links(links, checked_domain)
@@ -34,16 +36,16 @@ def crawl(session,url, links, checked_domain):
     global total_urls_visited
     global crawled_links
     global links_to_crawl
-    print (f'{total_urls_visited} - currently checked page: {url}')
+    module_logger.debug (f'{total_urls_visited} - currently checked page: {url}')
 
     if  url in crawled_links :
-        print(f'    skip: already visited: {url}')
+        module_logger.debug(f'    skip: already visited: {url}')
         return
     crawled_links.add(url)
 
     parsed = urlparse(url)
     if not (parsed.netloc == checked_domain):
-        print(f'    skip: out of domain: {parsed.netloc}')
+        module_logger.debug(f'    skip: out of domain: {parsed.netloc}')
         return
 
     total_urls_visited += 1
@@ -74,11 +76,11 @@ def get_all_website_links(session, url, links):
             href = parsed_href.scheme + "://" + parsed_href.netloc + parsed_href.path
         
             if href in links:
-               # print(f"[ ] link already gathered: {href}") # implement logging and logging level
+               # print(f"[ ] link already gathered: {href}") # implement module_logger and logging level
                pass
             else:
                 links.add(href)
                # print(f"[+] link found: {href}")
     except:
-        print("An exception occurred")
+        module_logger.error(f"An exception occurred in getting website links from {url}")
     return links

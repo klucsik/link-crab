@@ -191,7 +191,6 @@ def generate_mock_app():
     thread.daemon = True
     thread.start()
     time.sleep(1)
-    print("mockapp is running!")
 
 @pytest.fixture(scope='session', autouse=True)
 def mock_app():

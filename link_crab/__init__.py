@@ -8,7 +8,8 @@ import link_crab.reporting
 import link_crab.exercise_url
 import link_crab.gather_links
 import link_crab.csv_reader
-import sys
+
+import logging
 
 from urllib.request import urlparse
 import yaml
@@ -23,9 +24,6 @@ YELLOW = colorama.Fore.YELLOW
 GRAY = colorama.Fore.LIGHTBLACK_EX
 CYAN = colorama.Fore.CYAN
 RESET = colorama.Fore.RESET
-
-
-
 
 # CLI interface:
 def main():
@@ -59,26 +57,16 @@ def main():
     parser.add_argument("config_yaml_path", metavar='config_yaml_path', type=str,
                         help="Path to the config yaml file.")
     parser.add_argument("-t" ,"--test", action='store_true', help="wind up the default test application for testing")
+    parser.add_argument("-v","--verbose", action='store_true', help="sets verbosity level for the cli output.")
 
     args = parser.parse_args()
     config_yaml_path = args.config_yaml_path
 
     # setup:
-    print('----------------setup---------------------')
-
-    if args.test:
-        generate_mock_app()
-
     starting_time = datetime.now()
     config = {}
     with open(config_yaml_path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-    user = None
-    try:
-        user = config['user']
-    except:
-        pass
-    session = session_manager.make_session(user)
 
     starting_url = None
     try:
@@ -92,24 +80,68 @@ def main():
     except:
         pass
 
+    checked_domain=None
+    if starting_url:
+        checked_domain = urlparse(starting_url).netloc
+    if path_to_link_perms:
+        link_perms = csv_reader.read_link_perms(path_to_link_perms)
+        checked_domain = urlparse(link_perms[0][0]).netloc
+    
+    #logger.filehandler
+    if not os.path.exists(f'reports/{checked_domain}'):
+        os.makedirs(f'reports/{checked_domain}')  
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    fh = logging.FileHandler(f'reports/{checked_domain}/{checked_domain}_{starting_time}.log')
+    fh.setLevel(logging.DEBUG)
+
+    #lofgger.consolehandler
+    ch = logging.StreamHandler()
+    if args.verbose:
+        ch.setLevel(logging.DEBUG)
+        print("being Verbose!")
+    else:
+        ch.setLevel(logging.INFO)
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+
+    logger.addHandler(fh)
+    logger.addHandler(ch)
+
+    logger.info('----------------setup---------------------')
+    logger.info(f"checked_domain: {checked_domain}")
+   
+    if args.test:
+        generate_mock_app()
+
+    user = None
+    try:
+        user = config['user']
+    except:
+        pass
+    session = session_manager.make_session(user)
+
     links = set()
 
     links.add(starting_url)
 
     exit_value = 0
-    exit_message =""
     link_error_count = 0
     perm_error_count = 0 
 
+        
     # gathering:
     if starting_url:
-        print('----------------gather links---------------------')
-        checked_domain = urlparse(starting_url).netloc
+        logger.info('----------------gather links---------------------')
+        
         links.add(starting_url)
         links = gather_links.gather_links(session, links, checked_domain)
 
     # exercising:
-        print('----------------Excercise links---------------------')
+        logger.info('----------------Excercise links---------------------')
         link_db = []
         # remake the session, because crawling through the log-out link logs us out :D
         session = session_manager.make_session(user)
@@ -118,23 +150,22 @@ def main():
             link_db.append(exercise_outcome)
             if exercise_outcome[1] > 400:
                 exit_value = 1
-                exit_message = exit_message + f"broken link found: {exercise_outcome[0]}\n"
                 link_error_count = link_error_count + 1
 
-        reporting.save_linkdb_to_csv(link_db, checked_domain)
+        reporting.save_linkdb_to_csv(link_db, checked_domain,starting_time)
 
-        print('----------------REPORT: Excercised links---------------------')
+        logger.debug('----------------REPORT: Excercised links---------------------')
         for link in link_db:
-            print(f"[*] {link[0]} - {GREEN if link[1]==200 else RED} {link[1]} {RESET} - {GREEN if link[0]==link[4] else YELLOW} {link[4]} {RESET} - {link[2]} ms - accessible: {GREEN if link[3]==True else YELLOW} {link[3]} {RESET}")
+            logger.debug(f"[*] {link[0]} - {link[1]} - {link[4]} - {link[2]} ms - accessible: {link[3]}")
 
     # permission checking:
 
     
     if path_to_link_perms:
-        print('----------------permission checking---------------------')
+        logger.info('----------------permission checking---------------------')
         link_perm_db = []
-        link_perms = csv_reader.read_link_perms(path_to_link_perms)
-        checked_domain = urlparse(link_perms[0][0]).netloc
+        link_perms = csv_reader.read_link_perms(path_to_link_perms) # TODO: remove as duplicate
+        checked_domain = urlparse(link_perms[0][0]).netloc # TODO: remove as duplicate
         session = session_manager.make_session(user)
         for link_perm in link_perms:
             outcome = (exercise_url.exercise_url(session, link_perm[0]))
@@ -144,15 +175,14 @@ def main():
             outcome = outcome + [link_perm[1]] + [assertion_outcome]
             link_perm_db.append(outcome)
 
-        reporting.save_permdb_to_csv(link_perm_db, checked_domain, user['email'])
+        reporting.save_permdb_to_csv(link_perm_db, checked_domain, user['email'],starting_time)
 
-        print('----------------REPORT: Checked permissions---------------------')
+        logger.debug('----------------REPORT: Checked permissions---------------------')
         for link in link_perm_db:
             if link[6] != 'PASSED':
                 exit_value = 1
-                exit_message = exit_message + f"Failed permission found: {link[0]}\n"
                 perm_error_count = perm_error_count + 1
-            print(f"[*] {link[0]} - {GREEN if link[1]==200 else RED} {link[1]} {RESET} - {GREEN if link[0]==link[4] else YELLOW} {link[4]} {RESET} - {link[2]} ms - accessible: {GREEN if link[3]==True else YELLOW} {link[3]} {RESET} - should-be?: {link[5]} - assert:{GREEN if link[6]== 'PASSED' else RED} {link[6]} {RESET}")
+            logger.debug(f"[*] {link[0]} - {link[1]} - {link[4]} - {link[2]} ms - accessible: {link[3]} - should-be?: {link[5]} - assert: {link[6]}")
 
     # Exit:
     if starting_url:
@@ -160,7 +190,6 @@ def main():
     if path_to_link_perms:
         print(f"Checked {len(link_perm_db)} links for permission, {perm_error_count} of them is not met the expectations.")
     print(f"exit value:{exit_value}")
-    print(f"messages: {exit_message}")
     sys.exit(exit_value)
 
 
