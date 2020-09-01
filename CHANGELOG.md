@@ -1,3 +1,5 @@
+ # release v0.2.0
+
  * TECHNICAL FEATURE: common test fixtures moved out to helper files, session namecollision fixed.
  * FEATURE: Better logging
  * FEATURE: Generate summary at the end of the reports

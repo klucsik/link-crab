@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="link-crab",
-    version="0.1.1",
+    version="0.2.0",
     author="Krisztián Pál Klucsik",
     author_email="klucsik.krisztian@gmail.com",
     description="A link crawler and permission testing tool for websites",
