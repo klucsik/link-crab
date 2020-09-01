@@ -6,11 +6,7 @@ from link_crab.session_manager import make_session
 from link_crab.exercise_url import exercise_url
 import pytest
 from tests.test_app import mock_app
-
-@pytest.fixture(scope='session')
-def test_session():
-    session = make_session()
-    return session
+from tests.test_helpers import test_session
 
 # These tests are highly dependent on the testapp.py
 def test_url_validations(test_session):
