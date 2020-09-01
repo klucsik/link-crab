@@ -1,0 +1,7 @@
+user:
+    email: admin@example.com
+    email_locator_id: email
+    login_url: http://127.0.0.1:5000/user/sign-in
+    password: Password1
+    password_locator_id: password
+path_to_link_perms: testapp_admin_access.csv
