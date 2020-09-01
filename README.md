@@ -45,9 +45,8 @@ Example from the mock app:
     http://127.0.0.1:5000/admin
 
 **[domain_name]_[datetime]_exercised_links.csv:**
-This report is generated at the end of the exercising phase in the link gathering mode.
+This report is generated at the end of the exercising phase in the link gathering mode. Example from the mock app:
 
-Example from the mock app:
 
 | url                                                                  | status_code | resp_url(after_redirects)                                            | response_time(ms) | accessible? |
 |----------------------------------------------------------------------|-------------|----------------------------------------------------------------------|-------------------|-------------|
@@ -65,10 +64,9 @@ Example from the mock app:
 | http://127.0.0.1:5000/missing_member_only                            | 404         | http://127.0.0.1:5000/missing_member_only                            | 3                 | False       |
 | http://127.0.0.1:5000/admin                                          | 200         | http://127.0.0.1:5000/user/sign-in?next=/admin                       | 9                 | False       |
 
-**[domain_name]_[datetime]_[user_email]_permission_check_result.csv:**
-This report is generated at the end of the permission checking mode.
 
-Example from the mock app:
+**[domain_name]_[datetime]_[user_email]_permission_check_result.csv:**
+This report is generated at the end of the permission checking mode. Example from the mock app:
 
 | url                                          | status_code | resp_url(after_redirects)                                     | accessible? | should_be_accessible? | assert_accessibility |
 |----------------------------------------------|-------------|---------------------------------------------------------------|-------------|-----------------------|----------------------|
