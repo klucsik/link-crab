@@ -1,3 +1,7 @@
+# release v0.2.1
+
+  * DOCUMENTATION: Fixed table formatting in Generated Reports section
+
  # release v0.2.0
 
  * TECHNICAL FEATURE: common test fixtures moved out to helper files, session namecollision fixed.
