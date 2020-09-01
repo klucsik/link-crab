@@ -5,7 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from link_crab.session_manager import make_session
 from link_crab.gather_links import get_all_website_links, crawl, gather_links
 import pytest
-from tests.test_excercise_url import test_session
+from tests.test_helpers import test_session
 from tests.test_app import mock_app
 import logging
 
