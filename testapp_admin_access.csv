@@ -1,0 +1,8 @@
+link,should-access
+http://127.0.0.1:5000/,TRUE
+http://127.0.0.1:5000/user/register,TRUE
+http://127.0.0.1:5000/members,TRUE
+http://127.0.0.1:5000/user/forgot-password,TRUE
+http://127.0.0.1:5000/user/edit_user_profile,TRUE
+http://127.0.0.1:5000/admin,TRUE
+
