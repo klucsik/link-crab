@@ -84,6 +84,7 @@ Example from the mock app:
 
 
 All reports are saved in the reports folder under a folder named by the domain name. For example, when you test  `example.com`, the reports will be in `reports/example.com/` relative to where you called the command.
+The link-crab also saves runtime logs in the created report folder.
 
 The configuration is done through a yaml config files.
 
@@ -96,6 +97,7 @@ Dependencies: [chromedriver](https://chromedriver.chromium.org/downloads) for lo
 ## Usage:
 Simply use the command `python -m link_crab path/to/your/config.yaml` in the PYthon envrionment which has the link-crab installed. All the configuration is done in the config file, which is expanded bellow.
 If you want to use the sample flask mock app for testing, provide the `-t` flag.
+If you want to have verbose output, provide the `-t` flag.
 
 For additional help run:  `python -m link-crab -h`
 
