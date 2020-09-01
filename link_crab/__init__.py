@@ -148,7 +148,7 @@ def main():
         for link in links:
             exercise_outcome = exercise_url.exercise_url(session, link)
             link_db.append(exercise_outcome)
-            if exercise_outcome[1] > 400:
+            if exercise_outcome[1] == "err" or exercise_outcome[1] > 400:
                 exit_value = 1
                 link_error_count = link_error_count + 1
 
